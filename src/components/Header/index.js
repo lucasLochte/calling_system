@@ -13,7 +13,7 @@ export default function Header(){
     return(
         <div className="sidebar">
             <div>
-                <img src={user.avatarUrl === null ? avatarImg : user.avatarUr}  alt="Foto do usuário"/>
+                <img src={user.avatarUrl === null ? avatarImg : user.avatarUrl}  alt="Foto do usuário"/>
             </div>
 
             
