@@ -17,11 +17,11 @@ export default function Customers(){
         e.preventDefault();
 
         if (name !== '' && cnpj !== '' && address !== ''){
-            await addDoc(collection(db, "customers", {
+            await addDoc(collection(db, "customers"), {
                 nomeFantasia: name,
                 cnpj: cnpj,
-                endereco: address
-            }))
+                endereco: address,
+            })
             .then(() => {
                 setName('');
                 setCnpj('');
@@ -66,7 +66,7 @@ export default function Customers(){
                         <input
                             type="text"
                             placeholder="Endereço da empresa"
-                            value={name}
+                            value={address}
                             onChange={(e) => setAddress(e.target.value)} />
 
                         <button type="submit">Salvar</button>
