@@ -1,7 +1,7 @@
-import { useContext, useState, useEffect } from "react"
-import { AuthContext } from "../../contexts/auth"
+import { useState, useEffect } from "react"
 import Header from "../../components/Header";
 import Title from "../../components/Title";
+import Modal from "../../components/Modal";
 import { Link } from "react-router-dom";
 import { db } from "../../services/firebaseConnection";
 import { collection, getDocs, query, limit, orderBy, startAfter } from 'firebase/firestore';
@@ -20,8 +20,8 @@ export default function Dashboard(){
     const [lastDoc, setLastDoc] = useState();
     const [loadingPagination, setLoadingPagination] = useState(false);
 
-    //const {logout} = useContext(AuthContext);
-
+    const [showPostModal, setShowPostModal] = useState(false);
+    const [details, setDetails] = useState();
 
     useEffect(() => {
         async function loadChamados(){
@@ -61,7 +61,7 @@ export default function Dashboard(){
 
             const lastDoc = querySnapshot.docs[querySnapshot.docs.length - 1];
 
-            setCallingList(callingList => [... callingList, ...list]);
+            setCallingList(callingList => [...callingList, ...list]);
             setLastDoc(lastDoc);
         }
         else{
@@ -78,6 +78,11 @@ export default function Dashboard(){
         const querySnapshot = await getDocs(q);
         await updateState(querySnapshot);
 
+    }
+
+    function toggleModal(item){
+        setShowPostModal(!showPostModal);
+        setDetails(item);
     }
 
     if(loading){
@@ -148,7 +153,7 @@ export default function Dashboard(){
                                                 </td>
                                                 <td data-label="Cadastrado">{item.createdFormat}</td>
                                                 <td data-label="#">
-                                                    <button className="action" style={{ backgroundColor : '#3583f6'}}>
+                                                    <button className="action" style={{ backgroundColor : '#3583f6'}} onClick={() => toggleModal(item)}>
                                                         <FiSearch color="#fff" size={17} />
                                                     </button>
                                                     <Link to={`/new/${item.id}`} className="action"  style={{ backgroundColor : '#f6a935'}}>
@@ -169,6 +174,13 @@ export default function Dashboard(){
                     
                 </>
             </div>
+            
+            {showPostModal && (
+                <Modal
+                    content={details}
+                    close={ () => setShowPostModal(!showPostModal)}
+                />
+            )}
             
         </div>
     )
